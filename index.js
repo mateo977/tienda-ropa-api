@@ -15,6 +15,16 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+// Permite que otros sitios (por ejemplo WordPress) consulten la API
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(204);
+    }
+    next();
+});
 
 // Ruta de prueba (sirve para verificar que la API esta en linea)
 app.get('/', (req, res) => {
